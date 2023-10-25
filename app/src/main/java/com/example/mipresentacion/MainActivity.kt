@@ -3,6 +3,10 @@ package com.example.mipresentacion
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -11,7 +15,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.AddCircle
@@ -21,11 +29,13 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.rounded.Warning
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,10 +47,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.mipresentacion.ui.theme.MiPresentacionTheme
+import kotlinx.coroutines.delay
 
 
 class MainActivity : ComponentActivity() {
@@ -59,6 +71,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
 
 @Composable
 fun PantallaFinal(modifier: Modifier = Modifier) {
@@ -94,29 +107,39 @@ fun PantallaFinal(modifier: Modifier = Modifier) {
 
 @Composable
 fun Informacion(modifier: Modifier = Modifier){
-    Column (
-        modifier = modifier
-            .fillMaxHeight()
-            .padding(10.dp),
-        horizontalAlignment = Alignment.Start
-    ){
-        Text(
-            text = "ALEJANDRO NAVARRO",
-            modifier = Modifier.align(CenterHorizontally),
-            fontSize = 30.sp,
-            fontWeight = FontWeight.ExtraBold
-        )
-        Text(
-            text = "--------------- Programador Junior ---------------",
-            modifier = Modifier.align(CenterHorizontally),
-            fontSize = 18.sp,
-            fontStyle = FontStyle.Italic
-        )
-        Row (){
-            InformacionAdicional()
-            InformacionAdicional2()
+    var visible by remember { mutableStateOf(true) }
+
+    LaunchedEffect(Unit) {
+        while (true) {
+            visible = !visible
+            kotlinx.coroutines.delay(500) // Cambia el tiempo de espera según tus necesidades
         }
     }
+        Column (
+            modifier = modifier
+                .fillMaxHeight()
+                .padding(10.dp),
+            horizontalAlignment = Alignment.Start
+        ){
+            if (visible) {
+                Text(
+                    text = "ALEJANDRO NAVARRO",
+                    modifier = Modifier.align(CenterHorizontally),
+                    fontSize = 30.sp,
+                    fontWeight = FontWeight.ExtraBold
+                )
+            }
+            Text(
+                text = "--------------- Programador Junior ---------------",
+                modifier = Modifier.align(CenterHorizontally),
+                fontSize = 18.sp,
+                fontStyle = FontStyle.Italic
+            )
+            Row (){
+                InformacionAdicional()
+                InformacionAdicional2()
+            }
+        }
 }
 
 @Composable
@@ -192,24 +215,40 @@ fun InformacionAdicional2 (modifier: Modifier = Modifier){
 
 @Composable
 fun Innovacion(modifier: Modifier = Modifier){
-    var texto by remember { mutableStateOf("Pulse para ver el warning") }
+    var texto by remember { mutableStateOf("Soy un apasionado por la tecnología y la resolución de problemas. Poseo habilidades sólidas en desarrollo web y programación en Kotlin, con experiencia en la creación de aplicaciones web dinámicas y funcionales.") }
+    var butonTexto by remember {mutableStateOf("Pulse para ver la informacion importante")}
     Column (
         horizontalAlignment = CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-        modifier = modifier.fillMaxSize()
+        verticalArrangement = Arrangement.Bottom,
+        modifier = modifier
+            .fillMaxSize()
+            .padding(25.dp)
     ) {
         Text(
-            text = texto
+            text = texto,
+            modifier = Modifier.height(110.dp),
+            textAlign = TextAlign.Justify,
+            fontSize = 13.sp
 
         )
         Button(onClick = {
-            if (texto == "Pulse para ver el warning" ){
-                texto = "Informacion parcialmente inventada para este trabajo de clase"
+            if (butonTexto == "Pulse para ver la informacion importante" ){
+                texto = "Toda la informacion ha sido parcialmente inventada para la realizacion de este trabajo de clase."
+                butonTexto = "Volver a la descripcion"
             } else{
-                texto = "Pulse para ver el warning"
+                texto = "Soy un apasionado por la tecnología y la resolución de problemas. Poseo habilidades sólidas en desarrollo web y programación en Kotlin, con experiencia en la creación de aplicaciones web dinámicas y funcionales."
+                butonTexto = "Pulse para ver la informacion importante"
             }
-        }) {
-            Icon(Icons.Rounded.Warning, contentDescription = null)
+        }, modifier = Modifier.width(325.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFF89F7F7),
+                contentColor = Color.Black,
+            ), border = BorderStroke(3.dp, Color.Black)
+            ) {
+            //Icon(Icons.Rounded.Warning, contentDescription = null)
+            Text(
+                text = butonTexto
+            )
         }
     }
 }
