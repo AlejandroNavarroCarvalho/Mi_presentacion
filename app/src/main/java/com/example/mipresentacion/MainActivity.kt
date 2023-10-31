@@ -112,7 +112,7 @@ fun Informacion(modifier: Modifier = Modifier){
     LaunchedEffect(Unit) {
         while (true) {
             visible = !visible
-            kotlinx.coroutines.delay(500) // Cambia el tiempo de espera según tus necesidades
+            kotlinx.coroutines.delay(250) // Cambia el tiempo de espera según tus necesidades
         }
     }
         Column (
@@ -121,14 +121,18 @@ fun Informacion(modifier: Modifier = Modifier){
                 .padding(10.dp),
             horizontalAlignment = Alignment.Start
         ){
+            var nombreParpadeo by remember { mutableStateOf("") }
             if (visible) {
-                Text(
-                    text = "ALEJANDRO NAVARRO",
-                    modifier = Modifier.align(CenterHorizontally),
-                    fontSize = 30.sp,
-                    fontWeight = FontWeight.ExtraBold
-                )
+                nombreParpadeo = "ALEJANDRO NAVARRO"
+            } else{
+                nombreParpadeo = ""
             }
+            Text(
+                text = nombreParpadeo,
+                modifier = Modifier.align(CenterHorizontally),
+                fontSize = 30.sp,
+                fontWeight = FontWeight.ExtraBold
+            )
             Text(
                 text = "--------------- Programador Junior ---------------",
                 modifier = Modifier.align(CenterHorizontally),
